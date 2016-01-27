@@ -24,7 +24,7 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
 The data for this project come from this source: http://groupware.les.inf.puc-rio.br/har.
 
-```{r}
+```{r chunk_name, echo=FALSE}
 setInternet2(TRUE)
 download.file(url = "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv", destfile = "pml-training.csv")
 download.file(url = "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv", destfile = "pml-testing.csv")
@@ -104,18 +104,18 @@ gbm_fm <- train(classe ~ ., data=training, method="gbm", metric="Kappa",
 return models
 
 ####random forest
-```{r}
+```{r chunk_name, echo=TRUE}
 rf_fm 
 ```
 
 ####generalized boosted model
-```{r}
+```{r chunk_name, echo=TRUE}
 gbm_fm 
 ```
 
 ####Comparing between the two models
 
-```{r}
+```{r chunk_name, echo=TRUE}
 resampls = resamples(list(RF = rf_fm,
                           GBM = gbm_fm))
 
@@ -126,7 +126,7 @@ summary(difValues)
 Randomforest preformed better and was more accurate than the generalized boosted model. 
 
 Test the model
-```{r}
+```{r chunk_name, echo=TRUE}
 testing$pred <- predict(rf_fm,testing, "raw")
 confusionMatrix(testing$pred, testing$classe)
 ```
@@ -135,7 +135,8 @@ I tested the model and sure enough the Kappa value was very high ( Kappa : 0.995
 
 Calculate variable importance
 
-```{r}
+
+```{r chunk_name, echo=TRUE}
 varImp <- varImp(rf_fm, scale=FALSE)
 plot(varImp, main = "Importance of Top 30 Variables", top = 30)
 ```
@@ -143,7 +144,7 @@ plot(varImp, main = "Importance of Top 30 Variables", top = 30)
 
 Predict on sample 20 of the given test csv file
 
-```{r}
+```{r chunk_name, echo=TRUE}
 test_pred <- predict(rf_fm,test)
 test_pred
 ```
@@ -158,7 +159,11 @@ pml_write_files = function(x){
     write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
   }
 }
+pml_write_files(test_pred)
 ```
 
+test_pred
+ [1] B A B A A E D B A A B C B A E E A B B B
+Levels: A B C D E
 
-pml_write_files(test_pred)
+
